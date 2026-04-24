@@ -1,8 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <sstream>
-#include <string>
 
 using namespace std;
 
@@ -15,7 +13,7 @@ struct TreeNode {
 
 // Build BST from level-order array
 TreeNode* buildTree(const vector<int>& arr) {
-    if (arr.empty() || arr[0] == -1) return nullptr;
+    if (arr.empty()) return nullptr;
     
     TreeNode* root = new TreeNode(arr[0]);
     queue<TreeNode*> q;
@@ -27,14 +25,14 @@ TreeNode* buildTree(const vector<int>& arr) {
         q.pop();
         
         // Left child
-        if (i < arr.size() && arr[i] != -1) {
+        if (i < arr.size()) {
             node->left = new TreeNode(arr[i]);
             q.push(node->left);
         }
         i++;
         
         // Right child
-        if (i < arr.size() && arr[i] != -1) {
+        if (i < arr.size()) {
             node->right = new TreeNode(arr[i]);
             q.push(node->right);
         }
@@ -73,48 +71,18 @@ void deleteTree(TreeNode* root) {
 }
 
 int main() {
-    string line;
-    
-    // Read the entire input
-    string input = "";
-    while (getline(cin, line)) {
-        input += line + " ";
-    }
-    
-    // Parse input
     vector<int> arr;
-    int cnt = 0;
+    int val;
     
-    // Find root array
-    size_t start = input.find('[');
-    size_t end = input.find(']');
-    if (start != string::npos && end != string::npos) {
-        string arrStr = input.substr(start + 1, end - start - 1);
-        stringstream ss(arrStr);
-        string token;
-        while (getline(ss, token, ',')) {
-            // Trim whitespace
-            token.erase(0, token.find_first_not_of(" \t\n\r"));
-            token.erase(token.find_last_not_of(" \t\n\r") + 1);
-            if (!token.empty() && token != "null") {
-                arr.push_back(stoi(token));
-            } else {
-                arr.push_back(-1); // Use -1 to represent null
-            }
-        }
+    // Read 7 integers for the BST nodes
+    for (int i = 0; i < 7; i++) {
+        cin >> val;
+        arr.push_back(val);
     }
     
-    // Find cnt value
-    size_t cntPos = input.find("cnt");
-    if (cntPos != string::npos) {
-        size_t equalPos = input.find('=', cntPos);
-        if (equalPos != string::npos) {
-            string cntStr = input.substr(equalPos + 1);
-            // Extract number
-            stringstream ss(cntStr);
-            ss >> cnt;
-        }
-    }
+    // Read cnt
+    int cnt;
+    cin >> cnt;
     
     // Build tree and find result
     TreeNode* root = buildTree(arr);
